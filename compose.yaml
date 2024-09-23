@@ -1,0 +1,42 @@
+name: administation-app-be
+
+services:
+  db:
+    image: postgres
+    container_name: postgres_service
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    # networks:
+    #   - backend
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    network_mode: host
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    container_name: keycloak_service
+    command: ["start-dev"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      ports:
+        -"8080:8080"
+    # networks:
+    #   - backend
+    network_mode: host
+    
+
+
+volumes:
+  postgres_data:
+    name: postgres_data
+    driver: local
+networks:
+  backend:
+    name: backend
+    driver: bridge
+    # internal: true
