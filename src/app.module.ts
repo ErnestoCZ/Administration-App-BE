@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
+// import { User } from './users/entities/user.entity';
 @Module({
   imports: [
     UsersModule,
@@ -19,7 +19,8 @@ import { User } from './users/entities/user.entity';
       password: '1234',
       database: 'postgres',
       // entities: ['dist/**/*.entity{.ts,.js}'],
-      entities: [User],
+      // entities: [User],
+      autoLoadEntities: true,
       synchronize: true,
     }),
   ],
