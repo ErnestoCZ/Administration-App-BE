@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { DeleteUserDTO } from './dto/delete-user.dto';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -42,7 +44,17 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  async remove(id: string) {
+    const user = this.usersRepository.findOne({
+      where: { id: id },
+    });
+
+    if (user) {
+      return await this.usersRepository.delete(id);
+    } else {
+      throw new NotFoundError('User not found');
+    }
+
     return `This action removes a #${id} user`;
   }
 }
