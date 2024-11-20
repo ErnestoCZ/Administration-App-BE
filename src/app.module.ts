@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from './users/entities/user.entity';
+import { BillingsModule } from './billings/billings.module';
 @Module({
   imports: [
     UsersModule,
@@ -23,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    BillingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
