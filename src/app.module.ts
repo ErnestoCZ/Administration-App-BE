@@ -2,15 +2,21 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from './users/entities/user.entity';
 import { BillingsModule } from './billings/billings.module';
+import { ConfigModule } from '@nestjs/config';
+import { ConstantsModule } from './constants/constants.module';
+import configuration from '../config/configuration';
+import { Constant } from './constants/entities/constant.entity';
+import { User } from './users/entities/user.entity';
+
 @Module({
   imports: [
     UsersModule,
-    DevtoolsModule.register({
-      http: process.env.NODE_ENV !== 'production',
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -20,11 +26,11 @@ import { BillingsModule } from './billings/billings.module';
       password: '1234',
       database: 'postgres',
       // entities: ['dist/**/*.entity{.ts,.js}'],
-      // entities: [User],
-      autoLoadEntities: true,
+      entities: [User, Constant],
       synchronize: true,
     }),
     BillingsModule,
+    ConstantsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
