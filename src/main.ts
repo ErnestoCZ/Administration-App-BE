@@ -7,7 +7,7 @@ async function bootstrap() {
     cors: true,
   });
   app.useGlobalPipes(
-    new ValidationPipe({ disableErrorMessages: true, whitelist: true }),
+    new ValidationPipe({ disableErrorMessages: false, whitelist: false }),
   );
   await app.listen(3000);
 }
