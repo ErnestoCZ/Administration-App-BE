@@ -1,6 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { ConstantsService } from './constants.service';
 import { CreateConstantDto } from './dto/create-constant.dto';
+import { IsUUIDDto } from './dto/isUUID.dto';
+import { UpdateConstantDto } from './dto/update-constant.dto';
 
 @Controller('constants')
 export class ConstantsController {
@@ -8,26 +18,29 @@ export class ConstantsController {
 
   @Post()
   create(@Body() createConstantDto: CreateConstantDto) {
-    return console.log(createConstantDto);
+    return this.constantsService.create(createConstantDto);
   }
 
   @Get()
   findAll() {
-    return 'This action returns all constants';
+    return this.constantsService.findAll();
   }
 
   @Get(':id')
-  findOne() {
-    return;
+  findOne(@Param('id') id: IsUUIDDto) {
+    return this.constantsService.findOne(id);
   }
 
   @Patch(':id')
-  update() {
-    return;
+  update(
+    @Param('id') id: IsUUIDDto,
+    @Body() updateConstantDto: UpdateConstantDto,
+  ) {
+    return this.constantsService.update(id, updateConstantDto);
   }
 
   @Delete(':id')
-  remove() {
-    return;
+  remove(@Param('id') id: string) {
+    return this.constantsService.remove(id);
   }
 }

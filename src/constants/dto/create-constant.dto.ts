@@ -1,5 +1,9 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-
+import { IsNumber, IsOptional, IsString, IsEnum } from 'class-validator';
+enum Currency {
+  USD = 'USD',
+  EUR = 'EUR',
+  GBP = 'GBP',
+}
 export class CreateConstantDto {
   @IsString()
   name: string;
@@ -7,8 +11,8 @@ export class CreateConstantDto {
   @IsNumber()
   value: number;
 
-  @IsString()
-  currency: string;
+  @IsEnum(Currency)
+  currency: Currency;
 
   @IsOptional()
   @IsString()
