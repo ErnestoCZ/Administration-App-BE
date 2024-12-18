@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BillingsService } from './billings.service';
 import { CreateBillingDto } from './dto/create-billing.dto';
 import { UpdateBillingDto } from './dto/update-billing.dto';
+import { LoggingInterceptor } from 'src/Interceptors/logging.interceptor';
 
+@UseInterceptors(new LoggingInterceptor())
 @Controller('billings')
 export class BillingsController {
   constructor(private readonly billingsService: BillingsService) {}
