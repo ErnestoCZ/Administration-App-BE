@@ -8,8 +8,6 @@ import { BillingsModule } from './billings/billings.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConstantsModule } from './constants/constants.module';
 import configuration from '../config/configuration';
-import { Constant } from './constants/entities/constant.entity';
-import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -26,7 +24,7 @@ import { User } from './users/entities/user.entity';
       password: '1234',
       database: 'postgres',
       // entities: ['dist/**/*.entity{.ts,.js}'],
-      entities: [User, Constant],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     BillingsModule,
