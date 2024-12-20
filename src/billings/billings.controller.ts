@@ -42,4 +42,13 @@ export class BillingsController {
   remove(@Param('id') id: string) {
     return this.billingsService.remove(+id);
   }
+  @Post(':id/addUser') //TODO body needs a DTO
+  addUser(@Param('id') id: string, @Body() body: { userId: string }) {
+    return this.billingsService.addUser(id, body.userId);
+  }
+
+  @Delete(':id/removeUser') //TODO body needs a DTO
+  removeUser(@Param('id') id: string, @Body() body: { userId: string }) {
+    return this.billingsService.removeUser(id, body.userId);
+  }
 }
