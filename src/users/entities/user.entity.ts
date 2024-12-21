@@ -1,4 +1,11 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { Billing } from 'src/billings/entities/billing.entity';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -13,4 +20,8 @@ export class User {
 
   @Column()
   email: string;
+
+  @ManyToMany(() => Billing)
+  @JoinTable()
+  billings: Billing[];
 }

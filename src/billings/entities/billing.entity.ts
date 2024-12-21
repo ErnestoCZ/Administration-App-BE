@@ -3,9 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -28,6 +28,7 @@ export class Billing {
   @Column('date', { nullable: true })
   dateTo: Date;
 
-  @OneToMany(() => User, (user) => user.id, { nullable: true })
+  @ManyToMany(() => User)
+  // @JoinTable()
   user: User[];
 }
