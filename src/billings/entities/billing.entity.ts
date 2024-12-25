@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -29,6 +30,6 @@ export class Billing {
   dateTo: Date;
 
   @ManyToMany(() => User)
-  // @JoinTable()
+  @JoinTable()
   user: User[];
 }
