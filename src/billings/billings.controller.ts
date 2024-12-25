@@ -58,7 +58,6 @@ export class BillingsController {
   @Version('1')
   @Delete(':id/removeUser') //TODO body needs a DTO
   removeUser(@Param('id') id: string, @Body() body: { userId: string }) {
-    console.log('Inside Controller');
     return this.billingsService.removeUser(id, body.userId);
   }
 }
