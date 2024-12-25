@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Billing } from './entities/billing.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class BillingsService {
@@ -35,8 +36,8 @@ export class BillingsService {
     return await this.billingsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} billing`;
+  findOne(id: string) {
+    return `This action returns a ${id} billing`;
   }
 
   update(id: number, updateBillingDto: UpdateBillingDto) {
@@ -48,30 +49,40 @@ export class BillingsService {
   }
 
   async addUser(id: string, userId: string) {
-    console.log(id);
-    const foundBilling: Billing = await this.billingsRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-    if (!foundBilling) {
-      throw new NotFoundException('Billing not found');
-    }
-    console.log(foundBilling);
+    const userQuery = this.userService.findOne(userId);
+    const billingQuery = this.billingsRepository
+      .createQueryBuilder('billings')
+      .where('billings.id = :id', { id: id })
+      .leftJoinAndSelect('billings.user', 'user')
+      .getOne();
 
-    const foundUser = await this.userService.findOne(userId);
-    if (!foundUser) {
-      throw new NotFoundException('User not found');
-    }
+    const [billing, user] = await Promise.all([billingQuery, userQuery]);
 
-    const updatedBilling = await foundBilling.user.push(foundUser);
-    console.log(updatedBilling);
+    if (!billing) throw new NotFoundException('Billing not found');
+    if (!user) throw new NotFoundException('User not found');
 
-    // return foundBilling.user.push(foundUser);
-    return 'This action adds a user to a billing';
+    billing.user.push(user);
+    return await this.billingsRepository.save(billing);
   }
 
   async removeUser(id: string, userId: string) {
-    return 'This action removes a user from a billing';
+    const userQuery = this.userService.findOne(userId);
+    const billingQuery = this.billingsRepository
+      .createQueryBuilder('billings')
+      .where('billings.id = :id', { id: id })
+      .leftJoinAndSelect('billings.user', 'user')
+      .getOne();
+
+    const [billing, user] = await Promise.all([billingQuery, userQuery]);
+
+    if (!billing) throw new NotFoundException('Billing not found');
+    if (!user) throw new NotFoundException('User not found');
+
+    billing.user = billing.user.filter((userElement: User) => {
+      return userElement.id !== user.id;
+    });
+    console.log(billing.user);
+
+    return await this.billingsRepository.save(billing);
   }
 }
