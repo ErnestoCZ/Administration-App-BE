@@ -1,5 +1,5 @@
-import { Billing } from 'src/billings/entities/billing.entity';
-import { PrimaryGeneratedColumn, Column, Entity, ManyToMany } from 'typeorm';
+import { BillingItem } from 'src/billings/entities/billingItem.entity';
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,6 +15,6 @@ export class User {
   @Column()
   email: string;
 
-  @ManyToMany(() => Billing)
-  billings: Billing[];
+  @OneToMany(() => BillingItem, (billingItem) => billingItem.user)
+  billingItem: BillingItem[];
 }
