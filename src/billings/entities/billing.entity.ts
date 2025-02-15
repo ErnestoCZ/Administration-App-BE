@@ -1,13 +1,12 @@
-import { User } from 'src/users/entities/user.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
 } from 'typeorm';
+import { BillingItem } from './billingItem.entity';
 
 @Entity()
 export class Billing {
@@ -29,7 +28,6 @@ export class Billing {
   @Column('date', { nullable: true })
   dateTo: Date;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  user: User[];
+  @OneToMany(() => BillingItem, (billingItem) => billingItem.billing)
+  billingItem: BillingItem[];
 }
