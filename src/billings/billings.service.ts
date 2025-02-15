@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Billing } from './entities/billing.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class BillingsService {
@@ -61,7 +60,6 @@ export class BillingsService {
     if (!billing) throw new NotFoundException('Billing not found');
     if (!user) throw new NotFoundException('User not found');
 
-    billing.user.push(user);
     return await this.billingsRepository.save(billing);
   }
 
@@ -77,11 +75,6 @@ export class BillingsService {
 
     if (!billing) throw new NotFoundException('Billing not found');
     if (!user) throw new NotFoundException('User not found');
-
-    billing.user = billing.user.filter((userElement: User) => {
-      return userElement.id !== user.id;
-    });
-    console.log(billing.user);
 
     return await this.billingsRepository.save(billing);
   }
