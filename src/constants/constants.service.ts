@@ -1,6 +1,6 @@
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Constant } from './entities/constant.entity';
 import { CreateConstantDto } from './dto/create-constant.dto';
 import { IsUUIDDto } from './dto/isUUID.dto';
@@ -29,7 +29,7 @@ export class ConstantsService {
       return await this.constantsRepository.save(newConstant);
     }
 
-    throw Error('Constant already exists');
+    throw new BadRequestException('Constant already exists');
   }
 
   async findAll() {
