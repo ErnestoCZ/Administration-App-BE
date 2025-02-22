@@ -19,7 +19,8 @@ export class UsersController {
   @Version('1')
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    console.log(createUserDto);
+    return this.usersService.createUser(createUserDto);
   }
 
   @Version('1')
@@ -31,7 +32,7 @@ export class UsersController {
   @Version('1')
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    return this.usersService.getSingleUserById(id);
   }
 
   @Version('1')

@@ -15,7 +15,7 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     const foundUser: User[] = await this.usersRepository.find({
       where: {
         email: createUserDto.email,
@@ -26,8 +26,7 @@ export class UsersService {
 
     if (foundUser.length > 0) {
       throw new BadRequestException('User already exists');
-    }
-    if (foundUser.length === 0) {
+    } else {
       const user = this.usersRepository.create(createUserDto);
       return this.usersRepository.save(user);
     }
@@ -38,7 +37,7 @@ export class UsersService {
     return user;
   }
 
-  async findOne(id: string) {
+  async getSingleUserById(id: string) {
     const user = await this.usersRepository.findOne({
       where: { id: id },
     });

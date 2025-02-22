@@ -48,7 +48,7 @@ export class BillingsService {
   }
 
   async addUser(id: string, userId: string) {
-    const userQuery = this.userService.findOne(userId);
+    const userQuery = this.userService.getSingleUserById(userId);
     const billingQuery = this.billingsRepository
       .createQueryBuilder('billings')
       .where('billings.id = :id', { id: id })
@@ -64,7 +64,7 @@ export class BillingsService {
   }
 
   async removeUser(id: string, userId: string) {
-    const userQuery = this.userService.findOne(userId);
+    const userQuery = this.userService.getSingleUserById(userId);
     const billingQuery = this.billingsRepository
       .createQueryBuilder('billings')
       .where('billings.id = :id', { id: id })
