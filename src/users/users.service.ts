@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,7 +25,7 @@ export class UsersService {
     });
 
     if (foundUser.length > 0) {
-      return 'User already exists';
+      throw new BadRequestException('User already exists');
     }
     if (foundUser.length === 0) {
       const user = this.usersRepository.create(createUserDto);
@@ -29,7 +33,7 @@ export class UsersService {
     }
   }
 
-  async findAll() {
+  async getAllUsers() {
     const user: User[] = await this.usersRepository.find();
     return user;
   }
@@ -47,21 +51,16 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepository.findOne({ where: { id: id } });
+
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    return await this.usersRepository.update({ id: id }, updateUserDto);
   }
 
-  async remove(id: string) {
-    const user = this.usersRepository.findOne({
-      where: { id: id },
-    });
-
-    if (user) {
-      return await this.usersRepository.delete(id);
-    } else {
-      throw new Error('User not found');
-    }
-
-    return `This action removes a #${id} user`;
+  async removeUser(id: string) {
+    return await this.usersRepository.delete({ id: id });
   }
 }
